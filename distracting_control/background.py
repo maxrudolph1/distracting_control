@@ -161,7 +161,7 @@ class DistractingBackgroundEnv(control.Environment):
     sky_size = sky_height * sky_width * 3
     sky_address = self._env.physics.model.tex_adr[SKY_TEXTURE_INDEX]
 
-    sky_texture = self._env.physics.model.tex_rgb[sky_address:sky_address +
+    sky_texture = self._env.physics.model.tex_data[sky_address:sky_address +
                                                   sky_size].astype(np.float32)
 
     if self._video_paths:
@@ -240,7 +240,7 @@ class DistractingBackgroundEnv(control.Environment):
       end = self._background.address + self._background.size
       texture = self._background.textures[self._current_img_index]
 
-      self._env.physics.model.tex_rgb[start:end] = texture
+      self._env.physics.model.tex_data[start:end] = texture
       # Upload the new texture to the GPU. Note: we need to make sure that the
       # OpenGL context belonging to this Physics instance is the current one.
       with self._env.physics.contexts.gl.make_current() as ctx:
