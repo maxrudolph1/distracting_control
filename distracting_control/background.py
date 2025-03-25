@@ -211,11 +211,13 @@ class DistractingBackgroundEnv(control.Environment):
 
   def step(self, action):
     time_step = self._env.step(action)
-
     if time_step.first():
       self._reset_background()
       return time_step
-
+    self._step_background()
+    return time_step
+  
+  def _step_background(self):
     if self._dynamic and self._video_paths and not self._step_count % self._dynamic_bg_freq:
       # Move forward / backward in the image sequence by updating the index.
       self._current_img_index += self._step_direction
@@ -230,7 +232,6 @@ class DistractingBackgroundEnv(control.Environment):
         self._step_direction = -abs(self._step_direction)
 
       self._apply()
-    return time_step
 
   def _apply(self):
     """Apply the background texture to the physics."""
