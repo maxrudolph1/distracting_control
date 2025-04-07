@@ -107,7 +107,6 @@ class DistractingBackgroundEnv(control.Environment):
     self._shuffle_buffer_size = shuffle_buffer_size
     self._background = None
     self._current_img_index = 0
-
     if not dataset_path or num_videos == 0:
       # Allow running the wrapper without backgrounds to still set the ground
       # plane alpha value.
@@ -171,7 +170,7 @@ class DistractingBackgroundEnv(control.Environment):
         file_names = [
             os.path.join(path, fn.name)
             for path in self._video_paths
-            for fn in Path(path).glob('*/')
+            for fn in Path(path).glob('*')
         ]
         self._random_state.shuffle(file_names)
         # Load only the first n images for performance reasons.
@@ -180,7 +179,7 @@ class DistractingBackgroundEnv(control.Environment):
       else:
         # Randomly pick a video and load all images.
         video_path = self._random_state.choice(self._video_paths)
-        file_names = list(Path(video_path).glob('*/'))
+        file_names = list(Path(video_path).glob('*'))
         file_names = [x.name for x in file_names]
         if not self._dynamic:
           # Randomly pick a single static frame.
