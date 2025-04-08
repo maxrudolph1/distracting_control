@@ -107,6 +107,7 @@ class DistractingBackgroundEnv(control.Environment):
     self._shuffle_buffer_size = shuffle_buffer_size
     self._background = None
     self._current_img_index = 0
+    self._video_id = 0
     if not dataset_path or num_videos == 0:
       # Allow running the wrapper without backgrounds to still set the ground
       # plane alpha value.
@@ -137,6 +138,9 @@ class DistractingBackgroundEnv(control.Environment):
         video_paths = video_paths[:num_videos]
 
       self._video_paths = video_paths
+    
+  def _get_video_id(self):
+    return self._video_id
 
   def reset(self):
     """Reset the background state."""
@@ -178,7 +182,8 @@ class DistractingBackgroundEnv(control.Environment):
         images = [imread(fn) for fn in file_names]
       else:
         # Randomly pick a video and load all images.
-        video_path = self._random_state.choice(self._video_paths)
+        self._video_id = self._random_state.choice(len(self._video_paths))
+        video_path = self._video_paths[self._video_id]
         file_names = list(Path(video_path).glob('*'))
         file_names = [x.name for x in file_names]
         if not self._dynamic:
