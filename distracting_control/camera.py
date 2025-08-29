@@ -287,6 +287,11 @@ class DistractingCameraEnv(control.Environment):
     self._apply()
     return time_step
 
+  def _apply_distractions(self):
+    if hasattr(self._env, '_apply_distractions'):
+      self._env._apply_distractions()
+    self._apply()
+
   def _apply(self):
     if not self._camera_type:
       self.setup_camera()

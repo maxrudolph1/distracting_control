@@ -41,7 +41,7 @@ class DistractingColorEnv(control.Environment):
     self._env = env
     self._step_std = step_std
     self._max_delta = max_delta
-    self._random_state = np.random.RandomState()
+    self._random_state = np.random.RandomState(seed=seed)
 
     self._cam_type = None
     self._current_rgb = None
@@ -77,6 +77,12 @@ class DistractingColorEnv(control.Environment):
       self._reset_color()
       return time_step
 
+    self._apply_distractions()
+    return time_step
+  
+  def _apply_distractions(self):
+    if hasattr(self._env, '_apply_distractions'):
+      self._env._apply_distractions()
     color_change = self._random_state.randn(*self._current_rgb.shape)
     color_change = color_change * self._step_std
 
@@ -90,7 +96,6 @@ class DistractingColorEnv(control.Environment):
 
     # Apply the color changes.
     self._env.physics.model.mat_rgba[:, :3] = self._current_rgb
-    return time_step
 
   # Forward property and method calls to self._env.
   def __getattr__(self, attr):

@@ -1,3 +1,7 @@
+# Added functionality
+- Ability to apply distractions even when setting the state from a different dataset. 
+- Ability to set seed in the color wrapper (why tf was this not there before???)
+
 # The Distracting Control Suite
 
 ---
@@ -49,6 +53,3 @@ If you use this code, please cite the accompanying [paper](https://arxiv.org/pdf
 }
 ```
 
-## Disclaimer
-
-This is not an official Google product.

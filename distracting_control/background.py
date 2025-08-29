@@ -221,6 +221,11 @@ class DistractingBackgroundEnv(control.Environment):
     self._step_background()
     return time_step
   
+  def _apply_distractions(self):
+    if hasattr(self._env, '_apply_distractions'):
+      self._env._apply_distractions()
+    self._step_background()
+
   def _step_background(self):
     if self._dynamic and self._video_paths and not self._step_count % self._dynamic_bg_freq:
       # Move forward / backward in the image sequence by updating the index.
