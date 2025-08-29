@@ -1,6 +1,8 @@
 # Added functionality
 - Ability to apply distractions even when setting the state from a different dataset. 
+  - Need to use `env._env._apply_distractors()`
 - Ability to set seed in the color wrapper (why tf was this not there before???)
+- ability to get the ID of the video being played (i.e., the background distraction)
 
 # The Distracting Control Suite
 
