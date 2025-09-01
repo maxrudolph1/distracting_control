@@ -155,7 +155,7 @@ class DistractingBackgroundEnv(control.Environment):
                                              'a'] = self._ground_plane_alpha
 
     # For some reason the height of the skybox is set to 4800 by default,
-    # which does not work with new textures.
+    # which does not work with new textures.    
     self._env.physics.model.tex_height[SKY_TEXTURE_INDEX] = 800
 
     # Set the sky texture reference.
@@ -179,6 +179,7 @@ class DistractingBackgroundEnv(control.Environment):
         self._random_state.shuffle(file_names)
         # Load only the first n images for performance reasons.
         file_names = file_names[:self._shuffle_buffer_size]
+        file_names.sort()
         images = [imread(fn) for fn in file_names]
       else:
         # Randomly pick a video and load all images.
@@ -189,12 +190,12 @@ class DistractingBackgroundEnv(control.Environment):
         if not self._dynamic:
           # Randomly pick a single static frame.
           file_names = [self._random_state.choice(file_names)]
-        images = [imread(os.path.join(video_path, fn)) for fn in file_names]
 
+        file_names.sort()
+        images = [imread(os.path.join(video_path, fn)) for fn in file_names]
       # Pick a random starting point and steping direction.
       self._current_img_index = self._random_state.choice(len(images))
       self._step_direction = self._random_state.choice([-1, 1])
-
       # Prepare images in the texture format by resizing and flattening.
 
       # Generate image textures.
@@ -222,9 +223,10 @@ class DistractingBackgroundEnv(control.Environment):
     return time_step
   
   def _apply_distractions(self):
+    self._step_background()
+    print(self._current_img_index)
     if hasattr(self._env, '_apply_distractions'):
       self._env._apply_distractions()
-    self._step_background()
 
   def _step_background(self):
     if self._dynamic and self._video_paths and not self._step_count % self._dynamic_bg_freq:
